@@ -18,14 +18,14 @@ const getCustomers = async (req, res) => {
     };
 };
 
-const getCustomersById = async (req, res) => {
+const getCustomerById = async (req, res) => {
     const id = req.params.id;
     try {
-        let customersList = await connection.query('SELECT * FROM "customers" WHERE "customers".id = $1;', [id]);
-        if(customersList.rows.length === 0) {
+        let customer = await connection.query('SELECT * FROM "customers" WHERE "customers".id = $1;', [id]);
+        if(customer.rows.length === 0) {
             return res.sendStatus(STATUS_CODE.NOT_FOUND);
         }
-        return res.status(STATUS_CODE.OK).send(customersList.rows);
+        return res.status(STATUS_CODE.OK).send(customer.rows);
     } catch (error) {
         res.status(STATUS_CODE.SERVER_ERROR).send(error.message);
     };
@@ -48,4 +48,21 @@ const newCustomer = async (req, res) => {
 
 };
 
-export { getCustomers, newCustomer, getCustomersById };
+const updateCustomer = async (req, res) => {
+    const id = req.params.id;
+    const { name, phone, cpf, birthday } = req.body;
+
+    try {
+        let isCustomerExist = await connection.query('SELECT * FROM "customers" WHERE "customers".id = $1;', [id]);
+        if(isCustomerExist.rows.length === 0) {
+            return res.sendStatus(STATUS_CODE.NOT_FOUND);
+        }
+
+        await connection.query('UPDATE "customers" set name= $1, phone = $2, cpf = $3, birthday = $4 WHERE id = $5', [name, phone, cpf, birthday, id]);
+        return res.sendStatus(STATUS_CODE.CREATED);
+    } catch (error) {
+        res.status(STATUS_CODE.SERVER_ERROR).send(error.message);
+    };
+}
+
+export { getCustomers, newCustomer, getCustomerById, updateCustomer };
