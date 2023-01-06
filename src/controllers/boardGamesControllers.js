@@ -5,8 +5,14 @@ const getBoardGames = async (req, res) => {
     const query = req.query.name;
 
     try {
-        const categoriesList = await connection.query('SELECT * FROM "boardGames";');
-        res.status(STATUS_CODE.OK).send(categoriesList.rows);
+        let boardGameList
+        if(query !== undefined) {
+            boardGameList = await connection.query('SELECT "boardGames".*, categories.name AS "categoryName" FROM "boardGames" JOIN categories ON "boardGames"."categoryId" = categories.id WHERE "boardGames".name ILIKE $1;', [`${query}%`]);
+        } else {
+            boardGameList = await connection.query('SELECT "boardGames".*, categories.name AS "categoryName" FROM "boardGames" JOIN categories ON "boardGames"."categoryId" = categories.id;');
+        }
+
+        res.status(STATUS_CODE.OK).send(boardGameList.rows);
     } catch (error) {
         res.status(STATUS_CODE.SERVER_ERROR).send(error.message);
     };
