@@ -1,7 +1,7 @@
 import joi from "joi";
 
-const categorieNameSchema = joi.object({
+const categoryNameSchema = joi.object({
     name: joi.string().required().empty(' '),
 });
 
-export { categorieNameSchema };
+export { categoryNameSchema };

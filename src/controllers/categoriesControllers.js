@@ -10,11 +10,11 @@ const getCategories = async (req, res) => {
     };
 };
 
-const newCategorie = async (req, res) => {
+const newCategory = async (req, res) => {
     const { name } = req.body;
     try {
-        let existCategorie = await connection.query('SELECT * FROM categories WHERE "name" = $1;', [name]);
-        if (existCategorie.rows.length > 0) {
+        let existCategory = await connection.query('SELECT * FROM categories WHERE "name" = $1;', [name]);
+        if (existCategory.rows.length > 0) {
             return res.status(STATUS_CODE.CONFLICT).send('Categoria já existe');
         }
 
@@ -26,4 +26,4 @@ const newCategorie = async (req, res) => {
 
 };
 
-export { getCategories, newCategorie };
+export { getCategories, newCategory };
