@@ -14,7 +14,7 @@ const newCategory = async (req, res) => {
     const { name } = req.body;
     try {
         let existCategory = await connection.query('SELECT * FROM categories WHERE "name" = $1;', [name]);
-        if (existCategory.rows.length > 0) {
+        if (existCategory.rowCount > 0) {
             return res.status(STATUS_CODE.CONFLICT).send('Categoria já existe');
         }
 
