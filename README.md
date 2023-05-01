@@ -1,1 +1,1 @@
-# projeto-funtasy-rent-backend
+# projeto-funtasy-rent-api
